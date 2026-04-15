@@ -1,0 +1,842 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "8zXrU4je9ddX",
+        "outputId": "d25527f3-bea8-429a-918d-12a1ad67d020"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Hello World\n"
+          ]
+        }
+      ],
+      "source": [
+        "print(\"Hello World\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import matplotlib.pyplot as plt"
+      ],
+      "metadata": {
+        "id": "ANWSzftlJFqY"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Restaurant Data Analysis.\n",
+        "This project explores customer spending behavior using Python."
+      ],
+      "metadata": {
+        "id": "IvMtW0lZCXU6"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Data Loading"
+      ],
+      "metadata": {
+        "id": "pbN3hmG0A2LQ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "url = \"https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv\"\n",
+        "df = pd.read_csv(url)\n",
+        "\n",
+        "df.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 226
+        },
+        "id": "TCAM_E24944V",
+        "outputId": "467c55d3-71a1-43fb-c21f-8883daf9ff9e"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "   total_bill   tip     sex smoker  day    time  size\n",
+              "0       16.99  1.01  Female     No  Sun  Dinner     2\n",
+              "1       10.34  1.66    Male     No  Sun  Dinner     3\n",
+              "2       21.01  3.50    Male     No  Sun  Dinner     3\n",
+              "3       23.68  3.31    Male     No  Sun  Dinner     2\n",
+              "4       24.59  3.61  Female     No  Sun  Dinner     4"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-b9517ab7-8b26-48ba-9458-e549b42ba8f6\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_bill</th>\n",
+              "      <th>tip</th>\n",
+              "      <th>sex</th>\n",
+              "      <th>smoker</th>\n",
+              "      <th>day</th>\n",
+              "      <th>time</th>\n",
+              "      <th>size</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>16.99</td>\n",
+              "      <td>1.01</td>\n",
+              "      <td>Female</td>\n",
+              "      <td>No</td>\n",
+              "      <td>Sun</td>\n",
+              "      <td>Dinner</td>\n",
+              "      <td>2</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>10.34</td>\n",
+              "      <td>1.66</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>No</td>\n",
+              "      <td>Sun</td>\n",
+              "      <td>Dinner</td>\n",
+              "      <td>3</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>21.01</td>\n",
+              "      <td>3.50</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>No</td>\n",
+              "      <td>Sun</td>\n",
+              "      <td>Dinner</td>\n",
+              "      <td>3</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>23.68</td>\n",
+              "      <td>3.31</td>\n",
+              "      <td>Male</td>\n",
+              "      <td>No</td>\n",
+              "      <td>Sun</td>\n",
+              "      <td>Dinner</td>\n",
+              "      <td>2</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>24.59</td>\n",
+              "      <td>3.61</td>\n",
+              "      <td>Female</td>\n",
+              "      <td>No</td>\n",
+              "      <td>Sun</td>\n",
+              "      <td>Dinner</td>\n",
+              "      <td>4</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-b9517ab7-8b26-48ba-9458-e549b42ba8f6')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-b9517ab7-8b26-48ba-9458-e549b42ba8f6 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-b9517ab7-8b26-48ba-9458-e549b42ba8f6');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "df",
+              "summary": "{\n  \"name\": \"df\",\n  \"rows\": 244,\n  \"fields\": [\n    {\n      \"column\": \"total_bill\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 8.902411954856856,\n        \"min\": 3.07,\n        \"max\": 50.81,\n        \"num_unique_values\": 229,\n        \"samples\": [\n          22.12,\n          20.23,\n          14.78\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"tip\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 1.3836381890011826,\n        \"min\": 1.0,\n        \"max\": 10.0,\n        \"num_unique_values\": 123,\n        \"samples\": [\n          3.35,\n          1.5,\n          6.73\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"sex\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Male\",\n          \"Female\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"smoker\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Yes\",\n          \"No\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"day\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 4,\n        \"samples\": [\n          \"Sat\",\n          \"Fri\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"time\",\n      \"properties\": {\n        \"dtype\": \"category\",\n        \"num_unique_values\": 2,\n        \"samples\": [\n          \"Lunch\",\n          \"Dinner\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"size\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 0,\n        \"min\": 1,\n        \"max\": 6,\n        \"num_unique_values\": 6,\n        \"samples\": [\n          2,\n          3\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Data Overview"
+      ],
+      "metadata": {
+        "id": "WbRE0ubDBIKD"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.info()\n",
+        "df.describe()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 563
+        },
+        "id": "Kgngj-KkBGGl",
+        "outputId": "0644b34b-a02c-47be-a767-37bac95cda88"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 244 entries, 0 to 243\n",
+            "Data columns (total 7 columns):\n",
+            " #   Column      Non-Null Count  Dtype  \n",
+            "---  ------      --------------  -----  \n",
+            " 0   total_bill  244 non-null    float64\n",
+            " 1   tip         244 non-null    float64\n",
+            " 2   sex         244 non-null    object \n",
+            " 3   smoker      244 non-null    object \n",
+            " 4   day         244 non-null    object \n",
+            " 5   time        244 non-null    object \n",
+            " 6   size        244 non-null    int64  \n",
+            "dtypes: float64(2), int64(1), object(4)\n",
+            "memory usage: 13.5+ KB\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "       total_bill         tip        size\n",
+              "count  244.000000  244.000000  244.000000\n",
+              "mean    19.785943    2.998279    2.569672\n",
+              "std      8.902412    1.383638    0.951100\n",
+              "min      3.070000    1.000000    1.000000\n",
+              "25%     13.347500    2.000000    2.000000\n",
+              "50%     17.795000    2.900000    2.000000\n",
+              "75%     24.127500    3.562500    3.000000\n",
+              "max     50.810000   10.000000    6.000000"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-6fd30761-57be-4298-85df-45151541b821\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_bill</th>\n",
+              "      <th>tip</th>\n",
+              "      <th>size</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>count</th>\n",
+              "      <td>244.000000</td>\n",
+              "      <td>244.000000</td>\n",
+              "      <td>244.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>mean</th>\n",
+              "      <td>19.785943</td>\n",
+              "      <td>2.998279</td>\n",
+              "      <td>2.569672</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>std</th>\n",
+              "      <td>8.902412</td>\n",
+              "      <td>1.383638</td>\n",
+              "      <td>0.951100</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>min</th>\n",
+              "      <td>3.070000</td>\n",
+              "      <td>1.000000</td>\n",
+              "      <td>1.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>25%</th>\n",
+              "      <td>13.347500</td>\n",
+              "      <td>2.000000</td>\n",
+              "      <td>2.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>50%</th>\n",
+              "      <td>17.795000</td>\n",
+              "      <td>2.900000</td>\n",
+              "      <td>2.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75%</th>\n",
+              "      <td>24.127500</td>\n",
+              "      <td>3.562500</td>\n",
+              "      <td>3.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>max</th>\n",
+              "      <td>50.810000</td>\n",
+              "      <td>10.000000</td>\n",
+              "      <td>6.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-6fd30761-57be-4298-85df-45151541b821')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-6fd30761-57be-4298-85df-45151541b821 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-6fd30761-57be-4298-85df-45151541b821');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "summary": "{\n  \"name\": \"df\",\n  \"rows\": 8,\n  \"fields\": [\n    {\n      \"column\": \"total_bill\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 80.57800601480773,\n        \"min\": 3.07,\n        \"max\": 244.0,\n        \"num_unique_values\": 8,\n        \"samples\": [\n          19.78594262295082,\n          17.795,\n          244.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"tip\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 85.10953159599222,\n        \"min\": 1.0,\n        \"max\": 244.0,\n        \"num_unique_values\": 8,\n        \"samples\": [\n          2.99827868852459,\n          2.9,\n          244.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"size\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 85.39686221774684,\n        \"min\": 0.9510998047322332,\n        \"max\": 244.0,\n        \"num_unique_values\": 7,\n        \"samples\": [\n          244.0,\n          2.569672131147541,\n          3.0\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Data Analysis."
+      ],
+      "metadata": {
+        "id": "k10gUjZjC3Ho"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# How much do smokers and non-smokers spend on average?."
+      ],
+      "metadata": {
+        "id": "bUiHsnBubgzx"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df[\"total_bill\"].mean()\n",
+        "df.groupby(\"smoker\")[\"total_bill\"].mean()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 178
+        },
+        "id": "DGBevndCDEix",
+        "outputId": "d07f9795-56f9-41ee-eeef-90427fc24937"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "smoker\n",
+              "No     19.188278\n",
+              "Yes    20.756344\n",
+              "Name: total_bill, dtype: float64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_bill</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>smoker</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>No</th>\n",
+              "      <td>19.188278</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Yes</th>\n",
+              "      <td>20.756344</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> float64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 15
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "On average, how much do males spend vs females?"
+      ],
+      "metadata": {
+        "id": "NgN2HyT5GZBI"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.groupby(\"sex\")[\"total_bill\"].mean()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 178
+        },
+        "id": "mytSL7Y5Drq8",
+        "outputId": "4f3eeadb-3722-4278-a7a1-6c50e16ad5a8"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "sex\n",
+              "Female    18.056897\n",
+              "Male      20.744076\n",
+              "Name: total_bill, dtype: float64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_bill</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>sex</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>Female</th>\n",
+              "      <td>18.056897</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Male</th>\n",
+              "      <td>20.744076</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> float64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 5
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# How big is the difference of Males and Females spending on average?."
+      ],
+      "metadata": {
+        "id": "UiPAQ-6yMByL"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.groupby(\"sex\")[\"total_bill\"].mean().diff()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 178
+        },
+        "id": "kntjJ5taOTsH",
+        "outputId": "6b611f9a-8bdc-44d1-9bbd-21c00780727f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "sex\n",
+              "Female        NaN\n",
+              "Male      2.68718\n",
+              "Name: total_bill, dtype: float64"
+            ],
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>total_bill</th>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>sex</th>\n",
+              "      <th></th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>Female</th>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Male</th>\n",
+              "      <td>2.68718</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div><br><label><b>dtype:</b> float64</label>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 14
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Data Visualization."
+      ],
+      "metadata": {
+        "id": "sGhg5fWjH96o"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df[\"total_bill\"].hist()\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 184
+        },
+        "id": "bOJjPrszIDDT",
+        "outputId": "070ea4e3-d54b-43a9-dd2f-50ece52e7f32"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 640x480 with 1 Axes>"
+            ],
+            "image/png": "iVBORw0KGgoAAAANSUhEUgAAAh8AAAGdCAYAAACyzRGfAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAPYQAAD2EBqD+naQAAI5tJREFUeJzt3X9sleX9//HXKT09pbSnpRX6Q1roJlKQgbEInOE+U+iPEGQwGkVlGSLRZBYGNMbZRKBFtyLLBMkK6MZqzNLhcAOHyo9atcTYItSQgNs6MLgySw9T1x4o6+F86P39g3E+364oPeWc66bt85E05b7uu9f15p3T01fu+z7nOCzLsgQAAGBIlN0FAACAwYXwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMCoaLsL+G9dXV1qaWlRQkKCHA6H3eUAAIBesCxL586dU0ZGhqKivv7cxg0XPlpaWpSZmWl3GQAAoA9Onz6tUaNGfe0xN1z4SEhIkHS5eLfbbXM1A08gENCBAwdUUFAgp9NpdzmDCr23B323D723h1199/l8yszMDP4d/zo3XPi4cqnF7XYTPiIgEAgoLi5ObrebJwPD6L096Lt96L097O57b26ZCOmG0zFjxsjhcPT4Ki4uliR1dnaquLhYKSkpio+PV1FRkbxeb9+qBwAAA1JI4ePw4cM6c+ZM8KumpkaSdN9990mSVq1apT179mjnzp2qq6tTS0uLFixYEP6qAQBAvxXSZZcRI0Z0216/fr2++c1v6rvf/a7a29u1fft2VVdXa+bMmZKkqqoqjR8/Xg0NDZo+fXr4qgYAAP1Wn+/5uHjxon7729+qpKREDodDjY2NCgQCysvLCx6Tk5OjrKws1dfXf2X48Pv98vv9wW2fzyfp8jWrQCDQ1/LwFa70lN6aR+/tQd/tQ+/tYVffQ1mvz+Fj9+7damtr08MPPyxJam1tVUxMjJKSkrodl5qaqtbW1q+cp6KiQuXl5T3GDxw4oLi4uL6Wh2u4cskM5tF7e9B3+9B7e5ju+4ULF3p9bJ/Dx/bt2zV79mxlZGT0dQpJUmlpqUpKSoLbV16qU1BQwKtdIiAQCKimpkb5+fncfW4YvbcHfbcPvbeHXX2/cuWiN/oUPv7+97/r7bff1h//+MfgWFpami5evKi2trZuZz+8Xq/S0tK+ci6XyyWXy9Vj3Ol08mCNIPprH3pvD/puH3pvD9N9D2WtPn22S1VVlUaOHKk5c+YEx3Jzc+V0OlVbWxsca2pqUnNzszweT1+WAQAAA1DIZz66urpUVVWlxYsXKzr6/348MTFRS5cuVUlJiZKTk+V2u7V8+XJ5PB5e6QIAAIJCDh9vv/22mpub9cgjj/TYt3HjRkVFRamoqEh+v1+FhYXasmVLWAoFAAADQ8jho6CgQJZlXXVfbGysKisrVVlZed2FAQCAgalP93wAAAD0FeEDAAAYRfgAAABG9flNxoCvM+apN+0uIWSfrp9z7YMAANeNMx8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMCokMPHZ599ph/84AdKSUnR0KFD9a1vfUtHjhwJ7rcsS2vWrFF6erqGDh2qvLw8nThxIqxFAwCA/iuk8PGvf/1LM2bMkNPp1N69e/XnP/9Zv/jFLzR8+PDgMRs2bNDmzZu1bds2HTp0SMOGDVNhYaE6OzvDXjwAAOh/okM5+LnnnlNmZqaqqqqCY9nZ2cF/W5alTZs26emnn9a8efMkSa+88opSU1O1e/duPfDAA2EqGwAA9FchhY8//elPKiws1H333ae6ujrdfPPNevzxx/Xoo49Kkk6dOqXW1lbl5eUFfyYxMVHTpk1TfX39VcOH3++X3+8Pbvt8PklSIBBQIBDo038KX+1KTyPdW9cQK6LzR0Kke2Kq9+iOvtuH3tvDrr6Hsp7Dsqxe/5WIjY2VJJWUlOi+++7T4cOHtWLFCm3btk2LFy/WBx98oBkzZqilpUXp6enBn7v//vvlcDj06quv9pizrKxM5eXlPcarq6sVFxfX6/8IAACwz4ULF/TQQw+pvb1dbrf7a48NKXzExMRoypQp+uCDD4JjP/7xj3X48GHV19f3KXxc7cxHZmamPv/882sWj9AFAgHV1NQoPz9fTqczYutMLNsfsbkj5XhZYUTnN9V7dEff7UPv7WFX330+n2666aZehY+QLrukp6drwoQJ3cbGjx+vP/zhD5KktLQ0SZLX6+0WPrxer26//farzulyueRyuXqMO51OHqwRFOn++i85IjZ3pJh6vPHYtgd9tw+9t4fpvoeyVkivdpkxY4aampq6jf3tb3/T6NGjJV2++TQtLU21tbXB/T6fT4cOHZLH4wllKQAAMECFdOZj1apV+va3v62f/exnuv/++/Xhhx/qpZde0ksvvSRJcjgcWrlypZ599lmNHTtW2dnZWr16tTIyMjR//vxI1A8AAPqZkMLHnXfeqV27dqm0tFTr1q1Tdna2Nm3apEWLFgWPefLJJ9XR0aHHHntMbW1tuuuuu7Rv377gzaoAAGBwCyl8SNK9996re++99yv3OxwOrVu3TuvWrbuuwgAAwMDEZ7sAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADAq2u4CgBvFmKfejOj8riGWNkyVJpbtl/+SIyxzfrp+TljmAQCTQjrzUVZWJofD0e0rJycnuL+zs1PFxcVKSUlRfHy8ioqK5PV6w140AADov0K+7HLbbbfpzJkzwa/3338/uG/VqlXas2ePdu7cqbq6OrW0tGjBggVhLRgAAPRvIV92iY6OVlpaWo/x9vZ2bd++XdXV1Zo5c6YkqaqqSuPHj1dDQ4OmT59+/dUCAIB+L+TwceLECWVkZCg2NlYej0cVFRXKyspSY2OjAoGA8vLygsfm5OQoKytL9fX1Xxk+/H6//H5/cNvn80mSAoGAAoFAqOXhGq70NNK9dQ2xIjp/f+SKsrp9Dwd+R67N1GMePdF7e9jV91DWc1iW1etnwr179+r8+fMaN26czpw5o/Lycn322Wc6fvy49uzZoyVLlnQLEpI0depU3XPPPXruueeuOmdZWZnKy8t7jFdXVysuLq7X/xEAAGCfCxcu6KGHHlJ7e7vcbvfXHhtS+PhvbW1tGj16tJ5//nkNHTq0T+Hjamc+MjMz9fnnn1+zeIQuEAiopqZG+fn5cjqdEVtnYtn+iM3dX7miLD0zpUurj0TJ3xWeV7scLysMyzwDmanHPHqi9/awq+8+n0833XRTr8LHdb3UNikpSbfeeqtOnjyp/Px8Xbx4UW1tbUpKSgoe4/V6r3qPyBUul0sul6vHuNPp5MEaQZHub7heSjoQ+bscYesPvyO9x3OKfei9PUz3PZS1rutNxs6fP69PPvlE6enpys3NldPpVG1tbXB/U1OTmpub5fF4rmcZAAAwgIR05uOJJ57Q3LlzNXr0aLW0tGjt2rUaMmSIHnzwQSUmJmrp0qUqKSlRcnKy3G63li9fLo/HwytdAABAUEjh4x//+IcefPBBffHFFxoxYoTuuusuNTQ0aMSIEZKkjRs3KioqSkVFRfL7/SosLNSWLVsiUjgAAOifQgofO3bs+Nr9sbGxqqysVGVl5XUVBQAABi4+WA4AABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBR0XYXgGsb89SbYZvLNcTShqnSxLL98l9yhG1eAAB6izMfAADAKMIHAAAwivABAACMInwAAACjCB8AAMCo6wof69evl8Ph0MqVK4NjnZ2dKi4uVkpKiuLj41VUVCSv13u9dQIAgAGiz+Hj8OHDevHFFzVp0qRu46tWrdKePXu0c+dO1dXVqaWlRQsWLLjuQgEAwMDQp/Bx/vx5LVq0SL/61a80fPjw4Hh7e7u2b9+u559/XjNnzlRubq6qqqr0wQcfqKGhIWxFAwCA/qtPbzJWXFysOXPmKC8vT88++2xwvLGxUYFAQHl5ecGxnJwcZWVlqb6+XtOnT+8xl9/vl9/vD277fD5JUiAQUCAQ6Et5A45riBW+uaKsbt9hTiR6z+/ItV3pEb0yj97bw66+h7JeyOFjx44d+uijj3T48OEe+1pbWxUTE6OkpKRu46mpqWptbb3qfBUVFSovL+8xfuDAAcXFxYVa3oC0YWr453xmSlf4J0WvhLP3b731VtjmGuhqamrsLmHQovf2MN33Cxcu9PrYkMLH6dOntWLFCtXU1Cg2Njbkwq6mtLRUJSUlwW2fz6fMzEwVFBTI7XaHZY3+bmLZ/rDN5Yqy9MyULq0+EiV/F2+vblIken+8rDAs8wxkgUBANTU1ys/Pl9PptLucQYXe28Ouvl+5ctEbIYWPxsZGnT17VnfccUdw7NKlSzp48KB++ctfav/+/bp48aLa2tq6nf3wer1KS0u76pwul0sul6vHuNPp5MH6H5H4DBZ/l4PPdrFJOHvP70jv8ZxiH3pvD9N9D2WtkMLHrFmzdOzYsW5jS5YsUU5Ojn7yk58oMzNTTqdTtbW1KioqkiQ1NTWpublZHo8nlKUAAMAAFVL4SEhI0MSJE7uNDRs2TCkpKcHxpUuXqqSkRMnJyXK73Vq+fLk8Hs9VbzYFAACDT59e7fJ1Nm7cqKioKBUVFcnv96uwsFBbtmwJ9zIAAKCfuu7w8d5773Xbjo2NVWVlpSorK693agAAMADx2S4AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKOi7S4AQN+NeepNu0sI2afr59hdAgCbhXTmY+vWrZo0aZLcbrfcbrc8Ho/27t0b3N/Z2ani4mKlpKQoPj5eRUVF8nq9YS8aAAD0XyGFj1GjRmn9+vVqbGzUkSNHNHPmTM2bN08ff/yxJGnVqlXas2ePdu7cqbq6OrW0tGjBggURKRwAAPRPIV12mTt3brftn/70p9q6dasaGho0atQobd++XdXV1Zo5c6YkqaqqSuPHj1dDQ4OmT58evqoBAEC/1ed7Pi5duqSdO3eqo6NDHo9HjY2NCgQCysvLCx6Tk5OjrKws1dfXf2X48Pv98vv9wW2fzydJCgQCCgQCfS1vQHENscI3V5TV7TvMofeXmf69vrIezyfm0Xt72NX3UNYLOXwcO3ZMHo9HnZ2dio+P165duzRhwgQdPXpUMTExSkpK6nZ8amqqWltbv3K+iooKlZeX9xg/cOCA4uLiQi1vQNowNfxzPjOlK/yTolcGe+/feustW9atqamxZV3Qe7uY7vuFCxd6fWzI4WPcuHE6evSo2tvb9dprr2nx4sWqq6sLdZqg0tJSlZSUBLd9Pp8yMzNVUFAgt9vd53kHkoll+8M2lyvK0jNTurT6SJT8XY6wzYtro/eXHS8rNLpeIBBQTU2N8vPz5XQ6ja492NF7e9jV9ytXLnoj5PARExOjW265RZKUm5urw4cP64UXXtDChQt18eJFtbW1dTv74fV6lZaW9pXzuVwuuVyuHuNOp5MH63/4L4X/D5W/yxGReXFtg733dv1e85xiH3pvD9N9D2Wt636Tsa6uLvn9fuXm5srpdKq2tja4r6mpSc3NzfJ4PNe7DAAAGCBCOvNRWlqq2bNnKysrS+fOnVN1dbXee+897d+/X4mJiVq6dKlKSkqUnJwst9ut5cuXy+Px8EoXAAAQFFL4OHv2rH74wx/qzJkzSkxM1KRJk7R//37l5+dLkjZu3KioqCgVFRXJ7/ersLBQW7ZsiUjhAACgfwopfGzfvv1r98fGxqqyslKVlZXXVRQAABi4+GA5AABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGEX4AAAARhE+AACAUYQPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGBUSOGjoqJCd955pxISEjRy5EjNnz9fTU1N3Y7p7OxUcXGxUlJSFB8fr6KiInm93rAWDQAA+q+QwkddXZ2Ki4vV0NCgmpoaBQIBFRQUqKOjI3jMqlWrtGfPHu3cuVN1dXVqaWnRggULwl44AADon6JDOXjfvn3dtl9++WWNHDlSjY2N+p//+R+1t7dr+/btqq6u1syZMyVJVVVVGj9+vBoaGjR9+vTwVQ4AAPqlkMLHf2tvb5ckJScnS5IaGxsVCASUl5cXPCYnJ0dZWVmqr6+/avjw+/3y+/3BbZ/PJ0kKBAIKBALXU96A4RpihW+uKKvbd5hD7y8z/Xt9ZT2eT8yj9/awq++hrOewLKtPz4RdXV363ve+p7a2Nr3//vuSpOrqai1ZsqRbmJCkqVOn6p577tFzzz3XY56ysjKVl5f3GK+urlZcXFxfSgMAAIZduHBBDz30kNrb2+V2u7/22D6f+SguLtbx48eDwaOvSktLVVJSEtz2+XzKzMxUQUHBNYsfLCaW7Q/bXK4oS89M6dLqI1HydznCNi+ujd5fdrys0Oh6gUBANTU1ys/Pl9PpNLr2YEfv7WFX369cueiNPoWPZcuW6Y033tDBgwc1atSo4HhaWpouXryotrY2JSUlBce9Xq/S0tKuOpfL5ZLL5eox7nQ6ebD+h/9S+P9Q+bscEZkX1zbYe2/X7zXPKfah9/Yw3fdQ1grp1S6WZWnZsmXatWuX3nnnHWVnZ3fbn5ubK6fTqdra2uBYU1OTmpub5fF4QlkKAAAMUCGd+SguLlZ1dbVef/11JSQkqLW1VZKUmJiooUOHKjExUUuXLlVJSYmSk5Pldru1fPlyeTweXukCAAAkhRg+tm7dKkm6++67u41XVVXp4YcfliRt3LhRUVFRKioqkt/vV2FhobZs2RKWYgH0f2OeetPoeq4hljZMvXzvVF8vd326fk6YqwIGt5DCR29eGBMbG6vKykpVVlb2uSgAADBw8dkuAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMCra7gIA4EY35qk37S6hTz5dP8fuEoCr4swHAAAwivABAACMInwAAACjCB8AAMAowgcAADAq5PBx8OBBzZ07VxkZGXI4HNq9e3e3/ZZlac2aNUpPT9fQoUOVl5enEydOhKteAADQz4UcPjo6OjR58mRVVlZedf+GDRu0efNmbdu2TYcOHdKwYcNUWFiozs7O6y4WAAD0fyG/z8fs2bM1e/bsq+6zLEubNm3S008/rXnz5kmSXnnlFaWmpmr37t164IEHrq9aAADQ74X1no9Tp06ptbVVeXl5wbHExERNmzZN9fX14VwKAAD0U2F9h9PW1lZJUmpqarfx1NTU4L7/5vf75ff7g9s+n0+SFAgEFAgEwllev+UaYoVvriir23eYQ+/tMZj7bvdz6JX17a5jsLGr76GsZ/vbq1dUVKi8vLzH+IEDBxQXF2dDRTeeDVPDP+czU7rCPyl6hd7bYzD2/a233rK7BElSTU2N3SUMSqb7fuHChV4fG9bwkZaWJknyer1KT08Pjnu9Xt1+++1X/ZnS0lKVlJQEt30+nzIzM1VQUCC32x3O8vqtiWX7wzaXK8rSM1O6tPpIlPxdjrDNi2uj9/YYzH0/XlZo6/qBQEA1NTXKz8+X0+m0tZbBxK6+X7ly0RthDR/Z2dlKS0tTbW1tMGz4fD4dOnRIP/rRj676My6XSy6Xq8e40+nkwfof/kvhf8L0dzkiMi+ujd7bYzD2/UZ5DuX53B6m+x7KWiGHj/Pnz+vkyZPB7VOnTuno0aNKTk5WVlaWVq5cqWeffVZjx45Vdna2Vq9erYyMDM2fPz/UpQAAwAAUcvg4cuSI7rnnnuD2lUsmixcv1ssvv6wnn3xSHR0deuyxx9TW1qa77rpL+/btU2xsbPiqBgAA/VbI4ePuu++WZX31XeMOh0Pr1q3TunXrrqswAAAwMPHZLgAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMCosH6wXH8w5qk37S4BAIyw+/nONcTShqmXP5m7tx/q9+n6ORGuCjcCznwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAwivABAACMInwAAACjCB8AAMAowgcAADAq2u4CAADoz8Y89abdJXTjGmJpw1RpYtl++S85rnrMp+vnGK6qO858AAAAowgfAADAKMIHAAAwivABAACM4oZTAMAN40a7eRORwZkPAABgFOEDAAAYRfgAAABGET4AAIBRhA8AAGAU4QMAABhF+AAAAEYRPgAAgFGEDwAAYBThAwAAGBWx8FFZWakxY8YoNjZW06ZN04cffhippQAAQD8SkfDx6quvqqSkRGvXrtVHH32kyZMnq7CwUGfPno3EcgAAoB+JSPh4/vnn9eijj2rJkiWaMGGCtm3bpri4OP3mN7+JxHIAAKAfCfun2l68eFGNjY0qLS0NjkVFRSkvL0/19fU9jvf7/fL7/cHt9vZ2SdKXX36pQCAQ7vIU/b8dYZ+zP4nusnThQpeiA1G61OWwu5xBhd7bg77bh97bozd9/+KLL8K+7rlz5yRJlmVd89iwh4/PP/9cly5dUmpqarfx1NRU/fWvf+1xfEVFhcrLy3uMZ2dnh7s0/MdDdhcwiNF7e9B3+9B7e1yr7zf9InJrnzt3TomJiV97TNjDR6hKS0tVUlIS3O7q6tKXX36plJQUORwk5XDz+XzKzMzU6dOn5Xa77S5nUKH39qDv9qH39rCr75Zl6dy5c8rIyLjmsWEPHzfddJOGDBkir9fbbdzr9SotLa3H8S6XSy6Xq9tYUlJSuMvCf3G73TwZ2ITe24O+24fe28OOvl/rjMcVYb/hNCYmRrm5uaqtrQ2OdXV1qba2Vh6PJ9zLAQCAfiYil11KSkq0ePFiTZkyRVOnTtWmTZvU0dGhJUuWRGI5AADQj0QkfCxcuFD//Oc/tWbNGrW2tur222/Xvn37etyECvNcLpfWrl3b41IXIo/e24O+24fe26M/9N1h9eY1MQAAAGHCZ7sAAACjCB8AAMAowgcAADCK8AEAAIwifAxQBw8e1Ny5c5WRkSGHw6Hdu3d3229ZltasWaP09HQNHTpUeXl5OnHihD3FDiAVFRW68847lZCQoJEjR2r+/PlqamrqdkxnZ6eKi4uVkpKi+Ph4FRUV9XhTPoRu69atmjRpUvCNlTwej/bu3RvcT9/NWL9+vRwOh1auXBkco/fhV1ZWJofD0e0rJycnuP9G7znhY4Dq6OjQ5MmTVVlZedX9GzZs0ObNm7Vt2zYdOnRIw4YNU2FhoTo7Ow1XOrDU1dWpuLhYDQ0NqqmpUSAQUEFBgTo6/u8DDVetWqU9e/Zo586dqqurU0tLixYsWGBj1QPDqFGjtH79ejU2NurIkSOaOXOm5s2bp48//lgSfTfh8OHDevHFFzVp0qRu4/Q+Mm677TadOXMm+PX+++8H993wPbcw4Emydu3aFdzu6uqy0tLSrJ///OfBsba2Nsvlclm/+93vbKhw4Dp79qwlyaqrq7Ms63KfnU6ntXPnzuAxf/nLXyxJVn19vV1lDljDhw+3fv3rX9N3A86dO2eNHTvWqqmpsb773e9aK1assCyLx3ykrF271po8efJV9/WHnnPmYxA6deqUWltblZeXFxxLTEzUtGnTVF9fb2NlA097e7skKTk5WZLU2NioQCDQrfc5OTnKysqi92F06dIl7dixQx0dHfJ4PPTdgOLiYs2ZM6dbjyUe85F04sQJZWRk6Bvf+IYWLVqk5uZmSf2j57Z/qi3Ma21tlaQe7zibmpoa3Ifr19XVpZUrV2rGjBmaOHGipMu9j4mJ6fHhifQ+PI4dOyaPx6POzk7Fx8dr165dmjBhgo4ePUrfI2jHjh366KOPdPjw4R77eMxHxrRp0/Tyyy9r3LhxOnPmjMrLy/Wd73xHx48f7xc9J3wAEVJcXKzjx493uw6LyBo3bpyOHj2q9vZ2vfbaa1q8eLHq6ursLmtAO336tFasWKGamhrFxsbaXc6gMXv27OC/J02apGnTpmn06NH6/e9/r6FDh9pYWe9w2WUQSktLk6Qedz57vd7gPlyfZcuW6Y033tC7776rUaNGBcfT0tJ08eJFtbW1dTue3odHTEyMbrnlFuXm5qqiokKTJ0/WCy+8QN8jqLGxUWfPntUdd9yh6OhoRUdHq66uTps3b1Z0dLRSU1PpvQFJSUm69dZbdfLkyX7xeCd8DELZ2dlKS0tTbW1tcMzn8+nQoUPyeDw2Vtb/WZalZcuWadeuXXrnnXeUnZ3dbX9ubq6cTme33jc1Nam5uZneR0BXV5f8fj99j6BZs2bp2LFjOnr0aPBrypQpWrRoUfDf9D7yzp8/r08++UTp6en94vHOZZcB6vz58zp58mRw+9SpUzp69KiSk5OVlZWllStX6tlnn9XYsWOVnZ2t1atXKyMjQ/Pnz7ev6AGguLhY1dXVev3115WQkBC8vpqYmKihQ4cqMTFRS5cuVUlJiZKTk+V2u7V8+XJ5PB5Nnz7d5ur7t9LSUs2ePVtZWVk6d+6cqqur9d5772n//v30PYISEhKC9zRdMWzYMKWkpATH6X34PfHEE5o7d65Gjx6tlpYWrV27VkOGDNGDDz7YPx7vdr/cBpHx7rvvWpJ6fC1evNiyrMsvt129erWVmppquVwua9asWVZTU5O9RQ8AV+u5JKuqqip4zL///W/r8ccft4YPH27FxcVZ3//+960zZ87YV/QA8cgjj1ijR4+2YmJirBEjRlizZs2yDhw4ENxP3835/19qa1n0PhIWLlxopaenWzExMdbNN99sLVy40Dp58mRw/43ec4dlWZZNuQcAAAxC3PMBAACMInwAAACjCB8AAMAowgcAADCK8AEAAIwifAAAAKMIHwAAwCjCBwAAMIrwAQAAjCJ8AAAAowgfAADAKMIHAAAw6v8B7eUNLOKV5fgAAAAASUVORK5CYII=\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "overall = df[\"total_bill\"].mean()\n",
+        "grouped = df.groupby(\"smoker\")[\"total_bill\"].mean()\n",
+        "\n",
+        "print(\"Overall:\", overall)\n",
+        "print(grouped)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "kglyLmYWgdEM",
+        "outputId": "9b60942d-5ffc-4b8f-aaad-deadf2c03cf4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overall: 19.78594262295082\n",
+            "smoker\n",
+            "No     19.188278\n",
+            "Yes    20.756344\n",
+            "Name: total_bill, dtype: float64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Conclusion\n",
+        "\n",
+        "- The average customer spends about 19.78.\n",
+        "- Smokers tend to spend slightly more than non-smokers on average.\n",
+        "-\n",
+        "  Males spend slightly more on average than females based on this dataset.\n",
+        "-\n",
+        "  Males spend more on average by    2.68718.\n",
+        "- Most bills fall within a lower to mid range.\n",
+        "- The overall average bill is 19.78\n",
+        "- Smokers spend above the overall average\n",
+        "- Non-smokers spend below the overall average"
+      ],
+      "metadata": {
+        "id": "oYpaaFufD8Ap"
+      }
+    }
+  ]
+}
